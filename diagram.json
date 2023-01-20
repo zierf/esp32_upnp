@@ -1,0 +1,78 @@
+{
+    "version": 1,
+    "author": "Florian Zier",
+    "editor": "wokwi",
+    "parts": [
+        {
+            "type": "wokwi-esp32-devkit-v1",
+            "id": "esp",
+            "top": 0,
+            "left": 0,
+            "attrs": {
+                "builder": "rust-std-esp32"
+            }
+        },
+        {
+            "type": "wokwi-led",
+            "id": "led1",
+            "top": 0,
+            "left": 200,
+            "attrs": {
+                "color": "limegreen",
+                "flip": "1"
+            }
+        },
+        {
+            "type": "wokwi-resistor",
+            "id": "r1",
+            "top": 65,
+            "left": 130,
+            "rotate": 270,
+            "attrs": {
+                "value": "2000"
+            }
+        }
+    ],
+    "connections": [
+        [
+            "esp:TX0",
+            "$serialMonitor:RX",
+            "",
+            []
+        ],
+        [
+            "esp:RX0",
+            "$serialMonitor:TX",
+            "",
+            []
+        ],
+        [
+            "r1:2",
+            "led1:A",
+            "red",
+            [
+                "v0"
+            ]
+        ],
+        [
+            "led1:C",
+            "esp:GND.1",
+            "gray",
+            [
+                "v0"
+            ]
+        ],
+        [
+            "esp:D4",
+            "r1:1",
+            "red",
+            [
+                "h0"
+            ]
+        ]
+    ],
+    "serialMonitor": {
+        "display": "terminal"
+    },
+    "dependencies": {}
+}
