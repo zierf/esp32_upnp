@@ -17,3 +17,7 @@ Install and configure Wokwi for Visual Studio Code:
 
 Medium article to [Connect ESP32 to WiFi with Rust](https://medium.com/@rajeshpachaikani/connect-esp32-to-wifi-with-rust-7d12532f539b)
 (linking this [Gist](https://gist.github.com/rajeshpachaikani/2ef7c11b4d7e8a6704dba0f323bcdd6d)).
+
+## HTTP Client
+
+HTTP requests are based on the simple [usage example for HTTP client](https://github.com/esp-rs/esp-idf-svc/blob/ba1e19d59a0af0dd95ac6c67d0ed9d890059797d/examples/http_request.rs) from [ESP-IDF services crate](https://crates.io/crates/esp-idf-svc).

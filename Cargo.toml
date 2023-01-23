@@ -28,7 +28,7 @@ embedded-hal-0-2 = { package = "embedded-hal", version = "0.2.7", features = [
 ] }
 embedded-svc = "0.24"
 esp-idf-hal = "0.40"
-esp-idf-svc = "0.45"
+esp-idf-svc = { version = "0.45", features = ["experimental"] }
 esp-idf-sys = { version = "0.32.1", features = ["binstart"] }
 log = { version = "0.4", features = [
     "max_level_trace",

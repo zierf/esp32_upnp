@@ -4,6 +4,8 @@
 //! Depending on your target and the board you are using you should change the pin.
 //! If your board doesn't have on-board LEDs don't forget to add an appropriate resistor.
 
+mod http_client;
+
 // If using the `binstart` feature of `esp-idf-sys`, always keep this module imported
 use esp_idf_sys as _;
 
@@ -11,7 +13,10 @@ use std::str::FromStr;
 use std::time::Duration;
 use std::{net::Ipv4Addr, thread};
 
-use embedded_svc::wifi::{AuthMethod, ClientConfiguration, Configuration, Wifi};
+use embedded_svc::wifi::{
+    AuthMethod, ClientConfiguration as WifiClientConfiguration, Configuration as WifiConfiguration,
+    Wifi,
+};
 use esp_idf_hal::{gpio::PinDriver, peripherals::Peripherals};
 use esp_idf_svc::{
     eventloop::EspSystemEventLoop, log::EspLogger, nvs::EspDefaultNvsPartition, wifi::EspWifi,
@@ -52,7 +57,7 @@ fn main() -> anyhow::Result<()> {
     let mut wifi_driver = EspWifi::new(peripherals.modem, sys_loop, Some(nvs)).unwrap();
 
     wifi_driver
-        .set_configuration(&Configuration::Client(ClientConfiguration {
+        .set_configuration(&WifiConfiguration::Client(WifiClientConfiguration {
             ssid: CONFIG.wifi_ssid.into(),
             password: CONFIG.wifi_password.into(),
             auth_method: AuthMethod::from_str(CONFIG.wifi_auth_method)?,
@@ -87,6 +92,15 @@ fn main() -> anyhow::Result<()> {
     led.set_high()?;
 
     info!("Wifi ready: {:#?}", wifi_driver.sta_netif().get_ip_info()?);
+
+    // create HTTP(S) client
+    let mut client = http_client::create_client()?;
+
+    info!("simple get request");
+    let _ = http_client::get_request(&mut client);
+
+    info!("simple post request");
+    let _ = http_client::post_request(&mut client);
 
     loop {
         // thread::sleep to make sure the watchdog won't trigger
