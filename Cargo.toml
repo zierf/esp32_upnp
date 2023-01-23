@@ -30,6 +30,7 @@ embedded-svc = "0.24"
 esp-idf-hal = "0.40"
 esp-idf-svc = { version = "0.45", features = ["experimental"] }
 esp-idf-sys = { version = "0.32.1", features = ["binstart"] }
+fritz_tr064_upnp = { git = "https://github.com/zierf/tr064_upnp", rev = "ac05d3c" }
 log = { version = "0.4", features = [
     "max_level_trace",
     "release_max_level_info",

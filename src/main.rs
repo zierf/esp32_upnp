@@ -4,10 +4,12 @@
 //! Depending on your target and the board you are using you should change the pin.
 //! If your board doesn't have on-board LEDs don't forget to add an appropriate resistor.
 
-mod http_client;
-
 // If using the `binstart` feature of `esp-idf-sys`, always keep this module imported
 use esp_idf_sys as _;
+use fritz_tr064_upnp::{
+    gateway::{DEFAULT_HOST_NAME, DEFAULT_HOST_PORT, DEFAULT_ROOT_URL},
+    Gateway, Scheme,
+};
 
 use std::str::FromStr;
 use std::time::Duration;
@@ -45,7 +47,7 @@ fn main() -> anyhow::Result<()> {
 
     // bind the log crate to ESP logging
     EspLogger::initialize_default();
-    log::set_max_level(LevelFilter::max());
+    log::set_max_level(LevelFilter::Warn);
 
     let peripherals = Peripherals::take().unwrap();
     let sys_loop = EspSystemEventLoop::take().unwrap();
@@ -93,17 +95,26 @@ fn main() -> anyhow::Result<()> {
 
     info!("Wifi ready: {:#?}", wifi_driver.sta_netif().get_ip_info()?);
 
-    // create HTTP(S) client
-    let mut client = http_client::create_client()?;
+    let gateway_builder = Gateway::builder()
+        .host(DEFAULT_HOST_NAME)
+        .port(DEFAULT_HOST_PORT)
+        .scheme(Scheme::HTTP)
+        .root_url(DEFAULT_ROOT_URL)
+        .seal();
 
-    info!("simple get request");
-    let _ = http_client::get_request(&mut client);
-
-    info!("simple post request");
-    let _ = http_client::post_request(&mut client);
+    // let gateway = Gateway::default();
+    let gateway = gateway_builder.build()?;
 
     loop {
+        // show up- and download periodically
+        let response = gateway.get_addon_infos(None)?;
+
+        println!(
+            "▲ {} B/s | ▼ {} B/s",
+            response.new_byte_send_rate, response.new_byte_receive_rate
+        );
+
         // thread::sleep to make sure the watchdog won't trigger
-        thread::sleep(Duration::from_millis(5000));
+        thread::sleep(Duration::from_millis(1000));
     }
 }
