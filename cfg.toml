@@ -1,0 +1,7 @@
+[esp32_upnp]
+wifi_ssid = "Wokwi-GUEST"
+wifi_password = ""
+# none | wep | wpa | wpa2personal | wpawpa2personal | wpa2enterprise | wpa3personal | wpa2wpa3personal | wapipersonal
+wifi_auth_method = "none"
+# 0 = auto, >=1 to provide a specific channel
+wifi_channel = 0

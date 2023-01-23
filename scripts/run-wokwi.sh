@@ -29,7 +29,7 @@ export ESP_ARCH=xtensa-esp32-espidf
 export PACKAGE_NAME=esp32_upnp
 
 # ESP32 Blinky LED Wokwi Project
-export WOKWI_PROJECT_ID="354294739842051073"
+export WOKWI_PROJECT_ID="354588726177492993"
 
 if [ "${WOKWI_PROJECT_ID}" == "" ]; then
     wokwi-server --chip esp32 target/${ESP_ARCH}/${BUILD_MODE}/${PACKAGE_NAME}

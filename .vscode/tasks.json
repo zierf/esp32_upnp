@@ -1,0 +1,93 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build",
+      "type": "shell",
+      "command": "scripts/build.sh ${input:buildMode}",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Build & Flash",
+      "type": "shell",
+      "command": "scripts/flash.sh ${input:buildMode}",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Build & Run Wokwi",
+      "type": "shell",
+      "command": "scripts/run-wokwi.sh ${input:buildMode}",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      }
+    },
+    {
+      "label": "Watch project",
+      "type": "shell",
+      "command": "cargo watch -s \"cargo build ${input:watchMode}\"",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      }
+    },
+    {
+      "label": "Watch project & Run Wokwi",
+      "type": "shell",
+      "command": "cargo watch -s \"cargo build ${input:watchMode} && wokwi-server --chip esp32 --id 354588726177492993 target/xtensa-esp32-espidf/${input:buildMode}/esp32_upnp\"",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      }
+    },
+  ],
+  "inputs": [
+    {
+      "type": "pickString",
+      "id": "buildMode",
+      "description": "Select the build mode:",
+      "options": [
+        "release",
+        "debug"
+      ],
+      "default": "release"
+    },
+    {
+      "type": "pickString",
+      "id": "watchMode",
+      "description": "Select the watch mode:",
+      "options": [
+        {
+          "label": "release",
+          "value": "--release"
+        },
+        {
+          "label": "debug",
+          "value": ""
+        }
+      ],
+      "default": "--release"
+    }
+  ]
+}
